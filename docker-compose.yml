@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  hai-proxy:
+    container_name: hai-proxy
+    image: hai-proxy:latest
+    expose:
+      - "7881"
+    volumes:
+      - './config/:/etc/hai-proxy:ro'
+      - './logs/:/var/log/hai-proxy:rw'
+    environment:
+      VIRTUAL_HOST: 'hai.mydomain.com'
+      VIRTUAL_PORT: '7881'
+    restart: unless-stopped
+    networks:
+      # connect container to existing docker network "reverse-proxy"
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    external:
+      name: reverse-proxy
